@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Text,
   View,
@@ -6,8 +6,27 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function Logon({ navigation }) {
   const [registration, setRegistration] = useState("");
+
+  async function handleLogin() {
+    if (registration !== "") {
+      await AsyncStorage.setItem("@ifma-registration", registration);
+      navigation.navigate("Feed", { registration });
+    }
+  }
+
+  useEffect(() => {
+    async function getStorage() {
+      const registration = await AsyncStorage.getItem("@ifma-registration");
+      if (registration) {
+        navigation.navigate("Feed", { registration });
+      }
+    }
+    getStorage();
+  }, []);
+
   return (
     <View style={styles.container}>
       <TextInput
@@ -15,10 +34,7 @@ export default function Logon({ navigation }) {
         placeholder="Matrícula"
         onChangeText={(text) => setRegistration(text)}
       />
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.navigate("Feed", { registration })}
-      >
+      <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.title}>Entrar</Text>
       </TouchableOpacity>
     </View>

@@ -1,12 +1,10 @@
 import React from "react";
-
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-
 import Logon from "./pages/Logon";
 import Feed from "./pages/Feed";
 
-function Routes() {
+function Routes({ navigation }) {
   const Stack = createStackNavigator();
   return (
     <NavigationContainer>

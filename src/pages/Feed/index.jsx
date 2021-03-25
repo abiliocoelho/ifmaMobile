@@ -1,10 +1,36 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, StyleSheet, ScrollView } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
+import Icon from "react-native-vector-icons/Ionicons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import api from "../../services/api";
 
-export default function Feed({ route }) {
+export default function Feed({ route, navigation }) {
   const { registration } = route.params;
   const [data, setData] = useState({});
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerLeft: null,
+      headerRight: () => (
+        <TouchableOpacity
+          style={{ marginRight: 10 }}
+          onPress={async () => {
+            await AsyncStorage.clear();
+            navigation.navigate("Logon");
+          }}
+        >
+          <Icon name="exit-outline" size={28} />
+        </TouchableOpacity>
+      ),
+    });
+  }, []);
 
   useEffect(() => {
     async function getStudent() {
